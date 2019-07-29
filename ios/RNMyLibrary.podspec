@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.author             = { "author" => "author@domain.cn" }
   s.platform     = :ios, "7.0"
   s.source       = { :git => "https://github.com/author/RNMyLibrary.git", :tag => "master" }
+  s.vendored_frameworks = ['RNMyLibrary/QQSDK/TencentOpenAPI.framework']
   s.source_files  = "RNMyLibrary/**/*.{h,m}"
   s.requires_arc = true
 
