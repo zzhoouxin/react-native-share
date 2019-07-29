@@ -29,7 +29,6 @@ static AJShareActionView *actionView = nil;
 
 @implementation AJShareActionView
 
-
 +(AJShareActionView *)sharedInstance
 {
     static dispatch_once_t onceToken;
@@ -70,7 +69,7 @@ static AJShareActionView *actionView = nil;
     if(self = [super initWithFrame:frame])
     {
         NSArray *arr = @[@"微信",@"朋友圈",@"QQ"];
-         NSArray *arr1 = @[@"weixinIcon",@"pengyouquanIcon",@"qqIcon"];
+         NSArray *arr1 = @[@"icon_wechat",@"icon_friendscircle",@"icon_QQ"];
         _backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), ACTION_HEIGHT)];
         
         [_backView setBackgroundColor:UIColorFromRGB(0xFFFFFF)];
@@ -193,9 +192,17 @@ static AJShareActionView *actionView = nil;
     return self;
 }
 
+- (NSString *)getBundlePath:(NSString *)assetName{
+    NSBundle *myBundle = [NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:@"AJShareSDK" ofType: @"bundle"]];
+    if (myBundle && assetName) {
+        return [[myBundle resourcePath] stringByAppendingPathComponent:assetName];
+    }
+    return nil;
+}
+
 - (void)updataImgStr:(NSString *)imgStr andText:(NSString *)text
 {
-    [_imgView setImage:[UIImage imageNamed:imgStr]];
+    [_imgView setImage:[UIImage imageWithContentsOfFile:[self getBundlePath:imgStr]]];
     [_textLabel setText:text];
 }
 
