@@ -6,14 +6,15 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                   RNMyLibrary
                    DESC
-  s.homepage     = ""
+  s.homepage     = "https://github.com/zzhoouxin/react-native-share/ios"
   s.license      = "MIT"
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
-  s.author             = { "author" => "author@domain.cn" }
+  s.author             = { "JillZsy" => "zsy0530@163.com" }
   s.platform     = :ios, "7.0"
-  s.source       = { :git => "https://github.com/author/RNMyLibrary.git", :tag => "master" }
-  s.vendored_frameworks = ['RNMyLibrary/QQSDK/TencentOpenAPI.framework']
-  s.source_files  = "RNMyLibrary/**/*.{h,m}"
+  s.source       = { :git => "https://github.com/zzhoouxin/react-native-share/ios.git", :tag => "#{s.version}" }
+  s.vendored_frameworks = ['QQSDK/TencentOpenAPI.framework']
+  s.source_files  = "*.{h,m}", "src/*.{h,m}"
+  s.resource = 'AJShareSDK.bundle'
   s.requires_arc = true
 
 
