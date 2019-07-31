@@ -1,20 +1,25 @@
 import React, {Component} from 'react'
-import {
-    StyleSheet,
-    View,
-    Text,
-    Image,
-} from 'react-native'
+import {Image, NativeModules, StyleSheet, Text, View,} from 'react-native'
 import PropTypes from 'prop-types';
 import PreDimens from './res/PreDimens';
 import PreColors from './res/PreColors';
 import PreStyles from './res/PreStyles';
 import PreActionSheet from './res/PreActionSheet';
 import PreTouchLayout from './res/PreTouchLayout';
-import icon_wechat from './res/images/icon_wechat.png'
-import icon_circle from './res/images/icon_circle.png'
+import icon_wechat from './res/images/icon_wechat.png';
+import icon_circle from './res/images/icon_circle.png';
+import qq from './res/images/qq.png';
 
-const iconAllList = {"好友": icon_wechat, "朋友圈": icon_circle, "微博": icon_circle, "QQ": icon_circle};
+const Share = NativeModules.AJRCTShare;
+
+
+const iconAllList = {
+    "微信": {"img": icon_wechat, id: 1},
+    "朋友圈": {"img": icon_circle, id: 2},
+    "QQ": {"img": qq, id: 3},
+    "微博": {"img": icon_circle, id: 4},
+
+};
 
 
 export default class SharePanelComponent extends Component {
@@ -40,6 +45,9 @@ export default class SharePanelComponent extends Component {
         this._typeCheck();
         // 初始状态
         this.state = {}
+
+
+        console.log("ccc==========>", Share)
     }
 
     componentWillMount() {
@@ -55,6 +63,29 @@ export default class SharePanelComponent extends Component {
             />
         )
     }
+
+
+    share = (type) => {
+        //组装数据过程
+        let {shareUrl, desc, imgUrl, title} = this.props;
+        let shareContent = {
+            title,
+            desc,
+            url: imgUrl
+        }
+        let shareModel = {
+            mUrl: shareUrl,
+            shareContent,
+        }
+        //分享到好友或朋友圈
+        Share.share(type, shareModel, result => {
+            console.log("res======>", result)
+            if (result) {
+
+                this.refs.shareModal && this.refs.shareModal.close();
+            }
+        });
+    };
 
     renderContent = () => {
         return (
@@ -72,7 +103,7 @@ export default class SharePanelComponent extends Component {
         const {iconList} = this.props;
 
         let viewArr = []
-        iconList.map((item,index)=>{
+        iconList.map((item, index) => {
             viewArr.push(
                 this.renderItemContent(item, index)
             )
@@ -99,12 +130,12 @@ export default class SharePanelComponent extends Component {
                 key={i}
                 underlayColor={PreColors.white}
                 onPress={() => {
-                    console.log("调用原生分享")
+                    this.share(iconAllList[name].id)
                 }}
 
             >
                 <View style={{alignItems: 'center'}}>
-                    <Image source={iconAllList[name]} style={styles.ivShare} resizeMode={'contain'}/>
+                    <Image source={iconAllList[name].img} style={styles.ivShare} resizeMode={'contain'}/>
                     <View style={[PreStyles.center]}>
                         <Text style={styles.tvList}>{
                             name
@@ -122,10 +153,9 @@ export default class SharePanelComponent extends Component {
     _typeCheck = () => {
         let {desc, imgUrl, title, shareUrl, iconList} = this.props;
         iconList.map(item => {
-
             let isHasProperty = iconAllList[item];
             if (!isHasProperty) {
-                throw  new Error(`分享方式不支持${item}`)
+                throw  new Error(`分享方式不支持"${item}",仅支持[微信、朋友圈、QQ、微博]"`)
             }
         })
         //

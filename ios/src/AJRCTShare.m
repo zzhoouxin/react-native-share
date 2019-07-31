@@ -41,7 +41,7 @@ RCT_EXPORT_METHOD(share:(NSInteger)shareType albumId:(NSString *)param callBack:
             callback(@[@(success)]);
         }];
     });
-    
+
 }
 
 - (AJShareModel *)constructShareData:(NSString *)parameterString
@@ -50,7 +50,7 @@ RCT_EXPORT_METHOD(share:(NSInteger)shareType albumId:(NSString *)param callBack:
     if(dict!= nil && [dict isKindOfClass:[NSNull class]]) {
         return nil;
     }
-    
+
     AJShareModel *nativeH5SharedContent = [[AJShareModel alloc] init];
     NSString *urlStr       = dict[@"mUrl"];
     nativeH5SharedContent.webUrl = urlStr;
@@ -58,7 +58,7 @@ RCT_EXPORT_METHOD(share:(NSInteger)shareType albumId:(NSString *)param callBack:
     nativeH5SharedContent.desc  = subDict[@"desc"];
     nativeH5SharedContent.title = subDict[@"title"];
     nativeH5SharedContent.imageUrl = subDict[@"url"];
-    
+
     return nativeH5SharedContent;
 }
 
@@ -85,7 +85,7 @@ RCT_EXPORT_METHOD(shareImageToFriend:(NSString *)filePath)
     if (jsonString == nil) {
         return nil;
     }
-    
+
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
