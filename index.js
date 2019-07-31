@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Image, NativeModules, StyleSheet, Text, View,} from 'react-native'
+import {Image, NativeModules, StyleSheet, Text, View,Platform} from 'react-native'
 import PropTypes from 'prop-types';
 import PreDimens from './res/PreDimens';
 import PreColors from './res/PreColors';
@@ -68,20 +68,20 @@ export default class SharePanelComponent extends Component {
     share = (type) => {
         //组装数据过程
         let {shareUrl, desc, imgUrl, title} = this.props;
-        let shareContent = {
-            title,
-            desc,
-            url: imgUrl
-        }
-        let shareModel = {
+        let shareStr = {
             mUrl: shareUrl,
-            shareContent,
+            shareContent : {
+                title,
+                desc,
+                url: imgUrl
+            },
+        }
+        if(Platform.OS === 'ios'){
+            shareStr = JSON.stringify(shareStr);
         }
         //分享到好友或朋友圈
-        Share.share(type, shareModel, result => {
-            console.log("res======>", result)
+        Share.share(type, shareStr, result => {
             if (result) {
-
                 this.refs.shareModal && this.refs.shareModal.close();
             }
         });
